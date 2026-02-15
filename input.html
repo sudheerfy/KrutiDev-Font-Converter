@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KrutiDev Font Converter</title>
+    <meta name="description"
+        content="KrutiDev Font Converter – Convert Kruti Dev 010 (Remington) legacy Hindi text to Unicode (Mangal) and Unicode to KrutiDev instantly. Supports Inscript keyboard and phonetic typing for easy Hindi input.">
+    <meta name="keywords"
+        content="KrutiDev Converter, Kruti Dev 010, KrutiDev to Unicode, Unicode to KrutiDev, Mangal Font, Hindi Font Converter, Remington Typing, Inscript Keyboard, Hindi Typing Tool, Legacy Font Converter">
+    <meta name="author" content="Sudheer Singh">
+    <meta name="publisher" content="Unicef Gavi">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@100..900&family=Slabo+27px&display=swap"
+        rel="stylesheet">
+    <style>
+        .suggestion-input {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            font-family: "Slabo 27px", serif;
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: 1px;
+        }
+
+        .app-toolbar.glass {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: -16px;
+        }
+
+        .app-toolbar.glass .app-toolbar-title {
+            font-size: 21px;
+            font-weight: 600;
+            color: #002379;
+            letter-spacing: 0.3px;
+        }
+
+        #loadDiv1,
+        #loadDiv2 {
+            background: #000000;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.66
+        }
+
+        #btn-purnviram,
+        #btn-replace-letter {
+            font-family: "Noto Serif Devanagari", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        #unicode_text,
+        #legacy_text {
+            border: 2px solid rgb(204, 204, 204);
+        }
+
+        #unicode_text:focus,
+        #legacy_text:focus {
+            border-color: #86b7fe;
+            outline: 0;
+            box-shadow: none;
+        }
+
+        .suggestion_btn {
+            display: inline-block;
+            padding: 4px 10px 4px;
+            margin-bottom: 0;
+            font-size: 15px;
+            line-height: 18px;
+            color: #333;
+            text-align: center;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+            vertical-align: middle;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            background-image: -ms-linear-gradient(top, #fff, #e6e6e6);
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#e6e6e6));
+            background-image: -webkit-linear-gradient(top, #fff, #e6e6e6);
+            background-image: -o-linear-gradient(top, #fff, #e6e6e6);
+            background-image: linear-gradient(top, #fff, #e6e6e6);
+            background-image: -moz-linear-gradient(top, #fff, #e6e6e6);
+            background-repeat: repeat-x;
+            border: 1px solid #ccc;
+            border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+            border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+            border-bottom-color: #b3b3b3;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .suggestion_btn:active,
+        .suggestion_btn:hover,
+        .suggestion_btn[disabled] {
+            background-color: #e6e6e6;
+        }
+
+        .suggestion_btn:hover {
+            color: #333;
+            text-decoration: none;
+            background-color: #e6e6e6;
+            background-position: 0 -15px;
+            -webkit-transition: background-position 0.1s linear;
+            -moz-transition: background-position 0.1s linear;
+            -ms-transition: background-position 0.1s linear;
+            -o-transition: background-position 0.1s linear;
+            transition: background-position 0.1s linear;
+        }
+
+        .suggestion_btn:focus {
+            outline: thin dotted #333;
+            outline: 5px auto -webkit-focus-ring-color;
+            outline-offset: -2px;
+        }
+
+        .suggestion_btn:active {
+            background-color: #e6e6e6;
+            background-image: none;
+            outline: 0;
+            -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .suggestion_btn[disabled] {
+            cursor: default;
+            background-color: #e6e6e6;
+            background-image: none;
+            opacity: 0.65;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+
+        .suggestion_btn {
+            border-color: #ccc;
+            border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+        }
+
+        #input_tool_helper>.suggestion_btn {
+            margin: 0 2px;
+            outline: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="app-toolbar glass">
+            <div class="app-toolbar-title">
+                KrutiDev Font Converter
+            </div>
+        </div>
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-xl-6 g-3 p-0 bg-body-tertiary">
+                    <div class="bg-danger bg-gradient text-light p-1" style="height: 30px;">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="inscriptEnable">
+                            <label class="form-check-label" for="inscriptEnable" id="modeLabel">Mangal
+                                (Inscript)</label>
+                        </div>
+                    </div>
+                    <div style="height: 30px;">
+                        <div class="float-end">
+                            <span id="btn-purnviram" style="margin-right: 15px;cursor: pointer;"
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="पूर्ण विराम">
+                                पूर्ण विराम (।)
+                            </span>
+                            <span id="btn-copy-unicode" style="margin-right: 15px;cursor: pointer;"
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Copy">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-floppy2-fill" viewBox="0 0 16 16">
+                                    <path d="M12 2h-2v3h2z" />
+                                    <path
+                                        d="M1.5 0A1.5 1.5 0 0 0 0 1.5v13A1.5 1.5 0 0 0 1.5 16h13a1.5 1.5 0 0 0 1.5-1.5V2.914a1.5 1.5 0 0 0-.44-1.06L14.147.439A1.5 1.5 0 0 0 13.086 0zM4 6a1 1 0 0 1-1-1V1h10v4a1 1 0 0 1-1 1zM3 9h10a1 1 0 0 1 1 1v5H2v-5a1 1 0 0 1 1-1" />
+                                </svg>
+                            </span>
+                            <span id="btn-clear-unicode" style="margin-right: 10px;cursor: pointer;"
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Clear">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="loadDiv1" style="display:none;"><img src="loading_page.gif" width="100%" height="100%"
+                            id="loading-indicator1" /></div>
+                    <textarea class="Inscript" name="ConvertedText" id="unicode_text" dir="ltr" cols="" rows="20"
+                        style='resize: none;background: #FFFFFF;width: 100%;height: 500px; font-family: "Mangal"; padding: 3px 10px;'></textarea>
+                    <div class="bg-danger bg-gradient text-light p-1" style="margin-top:-6px;">
+                        <button type="button" class="btn btn-primary" id="btn-convert-krutidev">Convert to
+                            Krutidev</button>
+                    </div>
+                </div>
+                <div class="col-xl-6 g-3 p-0 bg-body-tertiary">
+                    <div class="bg-danger bg-gradient text-light p-1" style="height: 30px;">Kruti Dev 010 (Remington)
+                    </div>
+                    <div style="height: 30px;">
+                        <div class="float-end">
+                            <span id="btn-replace-letter" style="margin-right: 15px;cursor: pointer;"
+                                class="prevent-select header-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-title="Correct (श > ष)">
+                                Correct (श <-> ष)
+                            </span>
+                            <span id="btn-copy-legacy" style="margin-right: 15px;cursor: pointer;"
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Copy">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-floppy2-fill" viewBox="0 0 16 16">
+                                    <path d="M12 2h-2v3h2z" />
+                                    <path
+                                        d="M1.5 0A1.5 1.5 0 0 0 0 1.5v13A1.5 1.5 0 0 0 1.5 16h13a1.5 1.5 0 0 0 1.5-1.5V2.914a1.5 1.5 0 0 0-.44-1.06L14.147.439A1.5 1.5 0 0 0 13.086 0zM4 6a1 1 0 0 1-1-1V1h10v4a1 1 0 0 1-1 1zM3 9h10a1 1 0 0 1 1 1v5H2v-5a1 1 0 0 1 1-1" />
+                                </svg>
+                            </span>
+                            <span id="btn-clear-legacy" style="margin-right: 10px;cursor: pointer;"
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Clear">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="loadDiv2" style="display:none;"><img src="loading_page.gif" width="100%" height="100%"
+                            id="loading-indicator2" /></div>
+                    <textarea name="TextToConvert" id="legacy_text" cols="" rows="20"
+                        style='resize: none;background: #FFFFFF;width: 100%;height: 500px;padding: 0 10px;font-family:"Kruti Dev 010";font-size:20px;'></textarea>
+                    <div class="bg-danger bg-gradient text-light p-1" style="margin-top:-6px;">
+                        <button type="button" class="btn btn-primary" id="btn-convert-unicode">Convert to
+                            Unicode</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"
+        integrity="sha512-poSrvjfoBHxVw5Q2awEsya5daC0p00C8SKN74aVJrs7XLeZAi+3+13ahRhHm8zdAFbI2+/SUIrKYLvGBJf9H3A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <!-- Project Scripts -->
+    <script src="js/InscriptKeyBoard.js"></script>
+    <script src="js/transliteration-input.bundle.js"></script>
+    <script src="js/conversion.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
